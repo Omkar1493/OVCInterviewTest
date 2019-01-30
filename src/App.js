@@ -1,28 +1,45 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import axios from 'axios'
 
-class App extends Component {
+import Table from './Table'
+import ReactTable from 'react-table';
+
+
+class App extends Component 
+{  state = {
+    isLoading: true,
+    users: [],
+    error: null
+  };
+
+  fetchUsers() {
+    fetch(`https://jsonplaceholder.typicode.com/users`)
+      .then(response => response.json())
+      .then(data =>
+        this.setState({
+          users: data,
+          isLoading: false,
+        })
+      )
+      .catch(error => this.setState({ error, isLoading: false }));
+  }
+
+  componentDidMount() {
+    this.fetchUsers();
+  }
   render() {
-    return (
+   
+  const { isLoading, users, error } = this.state;
+    
+   return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+        <div className="Table-header" text-align="center">User Table</div>
+        <Table data={users}/>
       </div>
     );
   }
 }
 
-export default App;
+export default App
